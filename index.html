@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    
-    <title>To-Do App</title>
+    <title>To-Do Web App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <dialog class="intro-dialog" id="introDialog" aria-labelledby="introTitle" aria-describedby="introDescription">
+        <div class="intro-mark" aria-hidden="true">📋</div>
+        <h2 id="introTitle">Welcome to To-Do WebApp</h2>
+        <p id="introDescription">A simple place where to manage and organize your tasks.</p>
+        <form method="dialog">
+            <button class="intro-start" type="submit" autofocus>Get started</button>
+        </form>
+    </dialog>
+
     <div class="container">
-        <h1>📋 My To-Do App</h1>
+        <label class="theme-control" for="themeToggle">
+            <span>Dark mode</span>
+            <input type="checkbox" id="themeToggle" role="switch" aria-label="Dark mode">
+        </label>
+        <h1>📋My To-Do Lists</h1>
         
         <div class="input-section">
             <input 
@@ -31,9 +43,12 @@
             </div>
         </div>
     </div>
+    
+    <footer class="footer">
+        <p>© 2026 To-Do WebApp. All rights reserved to koushikgoudkammagoni</p>
+    </footer>
 
     <script src="script.js"></script>
        
-    
 </body>
 </html>
