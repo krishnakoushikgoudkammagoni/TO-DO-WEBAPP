@@ -114,30 +114,40 @@
             outline-offset: 3px;
         }
 
-        .intro-dialog {
-            margin: auto;
-            width: min(calc(100% - 32px), 420px);
-            max-height: calc(100% - 32px);
-            padding: 32px;
-            border: 0;
-            border-radius: 10px;
-            background: var(--surface);
-            color: var(--text-primary);
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
-        }
+       
 
-        .intro-dialog[open] {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: intro-enter 220ms ease-out;
-        }
+.intro-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, -50%);
 
-        .intro-dialog::backdrop {
-            background: rgba(18, 35, 57, 0.55);
-            backdrop-filter: blur(3px);
+    width: min(calc(100% - 32px), 420px);
+    max-height: calc(100% - 32px);
+    overflow: auto;
+    padding: 32px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text-primary);
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+.intro-dialog[open] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: intro-enter 220ms ease-out;
+}
+
+.intro-dialog::backdrop {
+    background: rgba(18, 35, 57, 0.55);
+    backdrop-filter: blur(3px);
+}
+
         }
 
         .intro-mark {
