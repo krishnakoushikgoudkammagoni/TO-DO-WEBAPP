@@ -1,113 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101827">
-  <title>To-Do Web Application</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    
+    <title>To-Do App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-
-  <main class="app-shell">
-    <header class="topbar">
-      <a class="brand" href="#" aria-label="To-Do Web Application home">
-        <span class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></span>
-        <span>taskflow<span class="brand-dot">.</span></span>
-      </a>
-      <div class="topbar-right">
-        <span class="status-dot"></span>
-        <span>YOUR PERSONAL WORKSPACE</span>
-      </div>
-    </header>
-
-    <section class="welcome">
-      <div>
-        <p class="eyebrow"><span class="eyebrow-line"></span> PLAN IT. DO IT. DONE.</p>
-        <h1>Make room for<br><span>great things.</span></h1>
-        <p class="welcome-copy">A little progress each day adds up to big results. What's on your list?</p>
-      </div>
-      <div class="date-card">
-        <span class="date-icon">✦</span>
-        <span class="date-label">TODAY</span>
-        <strong id="todayDate">Your day, your way</strong>
-        <span class="date-subtitle">One task at a time.</span>
-      </div>
-    </section>
-
-    <section class="stats-grid" aria-label="Task summary">
-      <article class="stat-card">
-        <div class="stat-top"><span class="stat-icon purple">◷</span><span class="stat-label">TOTAL TASKS</span></div>
-        <strong id="totalCount">0</strong>
-        <span class="stat-foot">Everything on your list</span>
-      </article>
-      <article class="stat-card">
-        <div class="stat-top"><span class="stat-icon orange">↗</span><span class="stat-label">IN PROGRESS</span></div>
-        <strong id="pendingCount">0</strong>
-        <span class="stat-foot">Ready for your focus</span>
-      </article>
-      <article class="stat-card">
-        <div class="stat-top"><span class="stat-icon green">✓</span><span class="stat-label">COMPLETED</span></div>
-        <strong id="completedCount">0</strong>
-        <span class="stat-foot">Look how far you've come</span>
-      </article>
-      <article class="stat-card progress-stat">
-        <div class="stat-top"><span class="stat-icon blue">✧</span><span class="stat-label">YOUR PROGRESS</span></div>
-        <strong><span id="progressPercent">0</span><small>%</small></strong>
-        <div class="progress-track"><span id="progressBar"></span></div>
-      </article>
-    </section>
-
-    <section class="composer panel">
-      <div class="composer-heading">
-        <div class="composer-title-wrap">
-          <span class="section-icon">＋</span>
-          <div><h2>Add a new task</h2><p>Capture it now. Make it happen next.</p></div>
+    <div class="container">
+        <h1>📋 My To-Do App</h1>
+        
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="taskInput" 
+                placeholder="Add a new task..."
+                autocomplete="off"
+            >
+            <button onclick="addTask()">Add Task</button>
         </div>
-        <span class="keyboard-hint"><kbd>ENTER</kbd> to add</span>
-      </div>
-      <form id="taskForm" class="task-form">
-        <label class="sr-only" for="taskInput">Task description</label>
-        <span class="input-icon" aria-hidden="true">✎</span>
-        <input id="taskInput" type="text" maxlength="180" placeholder="What would you like to get done?" autocomplete="off" required>
-        <button class="add-button" type="submit"><span>＋</span> Add task</button>
-      </form>
-      <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
-    </section>
-
-    <section class="tasks-header">
-      <div><p class="eyebrow">YOUR WORKSPACE</p><h2>Your tasks<span class="heading-period">.</span></h2></div>
-      <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search your tasks..." aria-label="Search tasks"><kbd>/</kbd></label>
-    </section>
-
-    <section class="lists-container">
-      <article class="task-column pending-column">
-        <div class="column-heading">
-          <div class="column-title"><span class="column-indicator pending-indicator"></span><h3>Pending tasks</h3><span class="count-pill" id="pendingPill">0</span></div>
-          <span class="column-caption">UP NEXT</span>
+        
+        <div class="lists-container">
+            <div class="list-section">
+                <h2>⏳ Pending Tasks</h2>
+                <div id="pendingList"></div>
+            </div>
+            
+            <div class="list-section completed">
+                <h2>✅ Completed Tasks</h2>
+                <div id="completedList"></div>
+            </div>
         </div>
-        <div id="pendingList" class="task-list"></div>
-      </article>
-      <article class="task-column completed-column">
-        <div class="column-heading">
-          <div class="column-title"><span class="column-indicator completed-indicator"></span><h3>Completed</h3><span class="count-pill" id="completedPill">0</span></div>
-          <span class="column-caption">NICE WORK</span>
-        </div>
-        <div id="completedList" class="task-list"></div>
-      </article>
-    </section>
+    </div>
 
-    <footer class="footer">
-      <span><span class="footer-spark">✦</span> Small steps. Remarkable progress.</span>
-      <span>MADE FOR YOUR MOMENTUM</span>
-    </footer>
-  </main>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
+       
+    
 </body>
 </html>
