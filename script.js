@@ -1,4 +1,15 @@
- let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let editingTaskId = null;
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('todo-theme');
+
+document.body.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+themeToggle.checked = savedTheme === 'dark';
+themeToggle.addEventListener('change', () => {
+    const theme = themeToggle.checked ? 'dark' : 'light';
+    document.body.dataset.theme = theme;
+    localStorage.setItem('todo-theme', theme);
+});
 
         function getCurrentDateTime() {
             const now = new Date();
@@ -55,14 +66,35 @@
 
         function editTask(id) {
             const task = tasks.find(t => t.id === id);
-            if (task) {
-                const newText = prompt('Edit your task:', task.text);
-                if (newText && newText.trim() !== '') {
-                    task.text = newText.trim();
-                    saveTasks();
-                    renderTasks();
-                }
+            if (!task) return;
+
+            editingTaskId = id;
+            renderTasks();
+
+            const input = document.getElementById(`editInput-${id}`);
+            input.focus();
+            input.select();
+        }
+
+        function saveTaskEdit(id) {
+            const task = tasks.find(t => t.id === id);
+            const input = document.getElementById(`editInput-${id}`);
+            const text = input.value.trim();
+
+            if (!task || text === '') {
+                input.focus();
+                return;
             }
+
+            task.text = text;
+            editingTaskId = null;
+            saveTasks();
+            renderTasks();
+        }
+
+        function cancelTaskEdit() {
+            editingTaskId = null;
+            renderTasks();
         }
 
         function saveTasks() {
@@ -99,22 +131,37 @@
         function createTaskElement(task, isCompleted = false) {
             const div = document.createElement('div');
             div.className = `task-item ${isCompleted ? 'completed-task' : ''}`;
-            
+            const isEditing = editingTaskId === task.id;
+
             div.innerHTML = `
                 <div class="task-content">
-                    <div class="task-text">${escapeHtml(task.text)}</div>
-                    <div class="task-time">
-                        Added: ${task.createdAt}${task.completedAt ? ` | Completed: ${task.completedAt}` : ''}
-                    </div>
+                    ${isEditing
+                        ? `<input class="task-edit-input" id="editInput-${task.id}" type="text" aria-label="Edit task">`
+                        : `<div class="task-text">${escapeHtml(task.text)}</div>
+                           <div class="task-time">
+                               Added: ${task.createdAt}${task.completedAt ? ` | Completed: ${task.completedAt}` : ''}
+                           </div>`}
                 </div>
                 <div class="task-actions">
-                    <button class="${isCompleted ? 'undo' : 'complete'}" onclick="toggleTask(${task.id})">
-                        ${isCompleted ? 'Undo' : 'Complete'}
-                    </button>
-                    <button class="edit" onclick="editTask(${task.id})">Edit</button>
-                    <button class="delete" onclick="deleteTask(${task.id})">Delete</button>
+                    ${isEditing
+                        ? `<button class="complete" onclick="saveTaskEdit(${task.id})">Save</button>
+                           <button class="edit" onclick="cancelTaskEdit()">Cancel</button>`
+                        : `<button class="${isCompleted ? 'undo' : 'complete'}" onclick="toggleTask(${task.id})">
+                               ${isCompleted ? 'Undo' : 'Complete'}
+                           </button>
+                           <button class="edit" onclick="editTask(${task.id})">Edit</button>
+                           <button class="delete" onclick="deleteTask(${task.id})">Delete</button>`}
                 </div>
             `;
+
+            if (isEditing) {
+                const input = div.querySelector('.task-edit-input');
+                input.value = task.text;
+                input.addEventListener('keydown', event => {
+                    if (event.key === 'Enter') saveTaskEdit(task.id);
+                    if (event.key === 'Escape') cancelTaskEdit();
+                });
+            }
             
             return div;
         }
@@ -132,3 +179,5 @@
         });
 
         renderTasks();
+
+        document.getElementById('introDialog').showModal();
